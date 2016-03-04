@@ -10,7 +10,9 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
-    <!-- 激活@Controller模式, 自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter -->
+    <!-- 自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter，
+         是spring MVC为@Controllers分发请求所必须的
+     -->
     <mvc:annotation-driven>
         <!-- 手动配置返回json数据的格式编码 -->
         <mvc:message-converters>
@@ -21,7 +23,9 @@
     </mvc:annotation-driven>
 
 
-    <!-- 设置使用@controller注解的类所在的jar包 -->
+    <!-- 自动扫描组件，默认扫描的注解类型是@Component。不过，在 @Component语义基础上细化后的@Repository、 @Service 和 @Controller
+         也同样可以获得 component-scan 的青睐。当前配置仅注入@Controller
+    -->
     <context:component-scan base-package="com.focusmate.controller"/>
 
     <!-- 对转向页面的路径解析。prefix：前缀， suffix：后缀 -->
