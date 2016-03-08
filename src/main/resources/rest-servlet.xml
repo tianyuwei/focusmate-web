@@ -2,31 +2,59 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:oxm="http://www.springframework.org/schema/oxm"
        xsi:schemaLocation="
     	http://www.springframework.org/schema/mvc
     	http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd
+        http://www.springframework.org/schema/oxm
+        http://www.springframework.org/schema/oxm/spring-oxm.xsd">
 
     <!-- 自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter，
          是spring MVC为@Controllers分发请求所必须的
      -->
     <mvc:annotation-driven>
-        <!-- 手动配置返回json数据的格式编码 -->
+        <!-- 手动配置返回json/xml数据的格式编码 -->
         <mvc:message-converters>
-            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-                <property name="supportedMediaTypes" value="application/json;charset=UTF-8"/>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/xml;charset=UTF-8</value>
+                        <value>text/xml;charset=UTF-8</value>
+                    </list>
+                </property>
             </bean>
+            <!--<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                <property name="supportedMediaTypes" value="application/json;charset=UTF-8" />
+            </bean>
+            <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/xml;charset=UTF-8</value>
+                        <value>text/xml;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>-->
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+    <oxm:jaxb2-marshaller id="jaxb2Marshaller">
+        <oxm:class-to-be-bound name="com.focusmate.wxpay.model.WXNotifyDTO" />
+    </oxm:jaxb2-marshaller>
 
     <!-- 自动扫描组件，默认扫描的注解类型是@Component。不过，在 @Component语义基础上细化后的@Repository、 @Service 和 @Controller
-         也同样可以获得 component-scan 的青睐。当前配置仅注入@Controller
+         也同样可以获得 component-scan 的青睐。
     -->
-    <context:component-scan base-package="com.focusmate.controller"/>
+    <context:component-scan base-package="com.focusmate.*" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <!-- 注入ControllerAdvice作为全局异常拦截<context:include-filter type="annotation"
+            expression="org.springframework.web.bind.annotation.ControllerAdvice"/> -->
+    </context:component-scan>
 
     <!-- 对转向页面的路径解析。prefix：前缀， suffix：后缀 -->
     <!--bean
@@ -38,4 +66,18 @@
             <value>.jsp</value>
         </property>
     </bean-->
+
+    <!-- 设置Session拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/station/*" />
+            <bean class="com.focusmate.interceptor.SessionInterceptor">
+                <property name="allowUrls">
+                    <list>
+                        <value>/station/login</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>
