@@ -1,89 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-       xmlns:repository="http://www.springframework.org/schema/data/repository"
-       xsi:schemaLocation="
-            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
-            http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-            http://www.springframework.org/schema/data/repository http://www.springframework.org/schema/data/repository/spring-repository-1.5.xsd">
 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            ">
+
+    <import resource="classpath:datasource.xml"/>
     <!-- 对包中的所有类进行扫描，以完成Bean创建和自动依赖注入的功能 -->
     <context:component-scan base-package="com.focusmate.*"/>
 
-    <!-- 对标注@Transcation注解的Bean进行加工处理，以织入事务管理切面 -->
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
-    <!-- Jpa 事务管理器配置 -->
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
-    </bean>
-
-    <!-- spring启动时扫描项目路径下的properties文件,后续用${key }方式取出对应值,这样可以代码解耦和，后续只需修改properties文件即可 -->
-    <bean id="propertyConfigurer"
-          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <list>
-                <value>classpath:config.properties</value>
-            </list>
-        </property>
-    </bean>
-
-    <!-- dbcp数据源配置 -->
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="url">
-            <value>${database.url}</value>
-        </property>
-        <property name="driverClassName">
-            <value>${database.driver}</value>
-        </property>
-        <property name="username">
-            <value>${database.user}</value>
-        </property>
-        <property name="password">
-            <value>${database.password}</value>
-        </property>
-        <property name="minIdle" value="${database.minIdle}"/>
-        <property name="maxIdle" value="${database.maxIdle}"/>
-        <property name="maxWait" value="${database.maxWait}"/>
-        <property name="testWhileIdle" value="true"/>
-        <property name="testOnBorrow" value="true"/>
-        <property name="validationQuery" value="select 1 "/>
-    </bean>
-
-    <!--指定hibernate实现JPA的适配器 -->
-    <bean id="hibernateJpaVendorAdapter"
-          class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-        <property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect"/>
-    </bean>
-
-    <!-- JPA实体管理工厂的配置 -->
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-
-        <!-- 指定数据源，依赖于dataSource Bean-->
-        <property name="dataSource" ref="dataSource"/>
-
-        <!-- 指定JPA的适配器,这里配置Hibernate的JPA适配器 -->
-        <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
-
-        <!--待扫描的实体类包，指定Entity实体类包路径 -->
-        <property name="packagesToScan" value="com.focusmate.domain"/>
-
-        <!-- 指定JPA属性；如Hibernate中指定是否显示SQL的是否显示、方言等 -->
-        <property name="jpaProperties">
-            <props>
-                <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-            </props>
-        </property>
-    </bean>
-    <!-- 重要配置：启用扫描并自动创建代理的功能 -->
-    <jpa:repositories base-package="com.focusmate" entity-manager-factory-ref="entityManagerFactory">
-        <repository:include-filter type="regex" expression=".*\.[^.]*Repository"/>
-    </jpa:repositories>
 </beans>
