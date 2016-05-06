@@ -3,11 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.focusmate</groupId>
     <artifactId>webservice</artifactId>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>focusmate-datasource</module>
         <module>focusmate-wxpay</module>
+        <module>focusmate-service</module>
     </modules>
     <name>webservice Maven Webapp</name>
     <url>http://maven.apache.org</url>
@@ -23,35 +24,11 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.focusmate</groupId>
-            <artifactId>datasource</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.focusmate</groupId>
-            <artifactId>wxpay</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <!-- servlet API -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1-b09</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- log4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.2</version>
-        </dependency>
-        <!-- junit 依赖 -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit-version}</version>
-            <scope>test</scope>
         </dependency>
         <!-- jackson mapper 依赖 -->
         <dependency>
@@ -64,54 +41,8 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>${json-version}</version>
         </dependency>
-        <!-- Spring framework, Spring MVC 依赖 -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-oxm</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
     </dependencies>
     <build>
         <finalName>webservice</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <warName>${project.artifactId}</warName>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 </project>
