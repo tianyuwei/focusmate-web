@@ -44,7 +44,7 @@
     </mvc:annotation-driven>
 
     <oxm:jaxb2-marshaller id="jaxb2Marshaller">
-        <oxm:class-to-be-bound name="com.focusmate.wxpay.model.WXNotifyDTO" />
+        <oxm:class-to-be-bound name="com.focusmate.wxpay.dto.WXNotifyDTO"/>
     </oxm:jaxb2-marshaller>
 
     <!-- 自动扫描组件，默认扫描的注解类型是@Component。不过，在 @Component语义基础上细化后的@Repository、 @Service 和 @Controller
@@ -70,7 +70,7 @@
     <!-- 设置Session拦截器 -->
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/station/*" />
+            <mvc:mapping path="/station/*"/>
             <bean class="com.focusmate.interceptor.SessionInterceptor">
                 <property name="allowUrls">
                     <list>

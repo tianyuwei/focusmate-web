@@ -60,7 +60,7 @@
         <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
 
         <!--待扫描的实体类包，指定Entity实体类包路径 -->
-        <property name="packagesToScan" value="com.focusmate.datasource.entity"/>
+        <property name="packagesToScan" value="com.focusmate.datasource.entities"/>
 
         <!-- 指定JPA属性；如Hibernate中指定是否显示SQL的是否显示、方言等 -->
         <property name="jpaProperties">
